@@ -19,6 +19,10 @@ REQUIRED_ENV = [GITHUB_KEY_ENV,
 
 
 def work_on(issue: Issue, repo: Repository):
+    if issue.closed_at:
+        print('Ignoring closed issue')
+        return
+
     print(f' -- Working on: "{issue.body}"')
 
     for match in pattern.finditer(issue.body):
@@ -71,7 +75,7 @@ already started working on this issue:
 Please output the full content of the file which has to be modified,
 after you applied the necessary modifications to tackle the issue at hand:
 """)
-        
+
         llm_question = llm_question.format(issue_description=issue.body,
                                            file_contents=current_content)
         print(llm_question)

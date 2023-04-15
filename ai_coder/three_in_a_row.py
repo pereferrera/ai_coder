@@ -1,7 +1,7 @@
 
 """
 Implementation of the classic three-in-a-row game.
-
+"""
 import random
 
 # Representation of the board
@@ -17,12 +17,14 @@ user_symbol = 'X'
 # Machine symbol
 machine_symbol = 'O'
 
+
 def print_board():
     """
     Prints a visual representation of the board.
     """
     for row in board:
         print(row)
+
 
 def user_turn():
     """
@@ -39,6 +41,7 @@ def user_turn():
                 print('This place is taken!')
         except (IndexError, ValueError):
             print('Invalid input')
+
 
 def check_winner():
     """
@@ -58,6 +61,7 @@ def check_winner():
     if board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[0][2] is not None:
         return board[0][2]
 
+
 def game_over():
     """
     Checks if the game is over by checking for a winner or a full board.
@@ -72,6 +76,7 @@ def game_over():
     print('The game is a draw!')
     return True
 
+
 def machine_turn():
     """
     Generates a random valid move and places the machine symbol on the board.
@@ -83,6 +88,7 @@ def machine_turn():
             board[row][col] = machine_symbol
             break
 
+
 # Main loop
 while True:
     print_board()
@@ -92,4 +98,3 @@ while True:
     machine_turn()
     if game_over():
         break
-"""
