@@ -6,7 +6,6 @@ from github import Github
 from github.Issue import Issue
 from github.Repository import Repository
 from ai_coder.llms import prompt_gpt3
-from github.IssueComment import IssueComment
 
 pattern = re.compile(r'\[([^][]+)\](\(((?:[^()]+|(?2))+)\))')
 
@@ -59,7 +58,7 @@ The issue description is:
 
 The file to work on has the following content:
 
-"{file_contents}"
+{file_contents}
 """)
         
         if comment_context:
