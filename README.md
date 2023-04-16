@@ -15,7 +15,7 @@ One opens an Issue prefixed by "[ai_coder]" in the title and specifies what need
 Run with (you will need to install dependencies from `requirements.txt` and define the environment OPENAI_KEY, GITHUB_TOKEN):
 
 ```
-python3 -m ai_coder.github_main
+python3 -m ai_coder.github_main <relative_link_to_github_project>
 ```
 
 You can run this process several times - the AI will keep improving the file, by picking the most recent contents from the pull request. Furthermore you can write comments on the Issue and the AI will take the comments into account to further iterate over the pull request. It is theoretically possible that the AI does not want to perform any further change. In this case, the output of the program will contain the line "LLM does not want to perform any new change for now.".

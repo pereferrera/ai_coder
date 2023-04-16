@@ -1,4 +1,5 @@
 import regex as re
+import sys
 import os
 
 import openai
@@ -132,7 +133,11 @@ if __name__ == '__main__':
     g = Github(os.environ[GITHUB_KEY_ENV])
     openai.api_key = os.environ[OPENAI_KEY_ENV]
 
-    repo = g.get_repo('pereferrera/ai_coder')
+    project = 'pereferrera/ai_coder'  # default project
+    if len(sys.argv) > 1:
+        project = sys.argv[1]
+
+    repo = g.get_repo(project)
 
     for issue in repo.get_issues():
         if '[ai_coder]' in issue.title:
