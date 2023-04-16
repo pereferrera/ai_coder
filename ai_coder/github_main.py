@@ -68,11 +68,9 @@ The issue description is:
 
 "{issue_description}"
 
-The file to work on has the following content (encapsulated by ===START=== and ===END===):
+The file to work on has the following content:
 
-===START===
 {file_contents}
-===END===
 """)
 
         if comment_context:

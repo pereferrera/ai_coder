@@ -22,7 +22,7 @@ You can run this process several times - the AI will keep improving the file, by
 
 ## Example
 
-See this [issue](https://github.com/pereferrera/ai_coder/issues/7) for an example on how the communication / process works.
+See this [issue](https://github.com/pereferrera/ai_coder/issues/11) for an example on how the communication / process works.
 
 ## TODO (easier)
 
