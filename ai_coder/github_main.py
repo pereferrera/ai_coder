@@ -27,6 +27,9 @@ def work_on(issue: Issue, repo: Repository):
     for match in pattern.finditer(issue.body):
         description, _, url = match.groups()
 
+        if url.startswith('../blob/main'):
+            url = url[len('../blob/main'):]
+
         print(f" > Found context file to work on: {description}: {url}")
 
         comment_context = ''
@@ -64,9 +67,11 @@ The issue description is:
 
 "{issue_description}"
 
-The file to work on has the following content:
+The file to work on has the following content (encapsulated by ===START=== and ===END===):
 
+===START===
 {file_contents}
+===END===
 """)
 
         if comment_context:
@@ -106,13 +111,17 @@ after you applied the necessary modifications to tackle the issue at hand:
                         f'{e} - Pull request probably exists? but pr_id '
                         'is None!')
             else:
+                # TODO do this earlier and pull the reviews, feed the review
+                # contents to the LLM
                 pr = repo.get_pull(pr_id)
 
-            issue.create_comment(f'Worked on it: {pr.html_url}')
+            issue.create_comment(f'[ai_coder] Worked on it: {pr.html_url}')
         else:
             print('LLM does not want to perform any new change for now.')
 
         # TODO for now only one context file
+        # later we can support multiple steps e.g. first write the impl.
+        # then write the tests
         break
 
 
