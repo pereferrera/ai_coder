@@ -22,7 +22,7 @@ You can run this process several times - the AI will keep improving the file, by
 
 ## Example
 
-This [issue](https://github.com/pereferrera/ai_coder/issues/5) lead to this [implementation](ai_coder/three_in_a_row.py) using GPT-3 (I only had to adjust a slight typo)
+See this [issue](https://github.com/pereferrera/ai_coder/issues/7) for an example on how the communication / process works.
 
 ## TODO (easier)
 
