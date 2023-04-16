@@ -27,6 +27,7 @@ See this [issue](https://github.com/pereferrera/ai_coder/issues/7) for an exampl
 ## TODO (easier)
 
 At the moment this is a very simple POC so a lot of things could be done:
+* Integrate LLMs other than GPT-3 by default.
 * Allow comments on the pull request itself, and the AI reads them. Right now only comments on the Issue are allowed.
 * Allow proper code reviews e.g. place comments on the code with the content of an inline review.
 * Allow multiple steps (right now the AI can only work on one context file).
