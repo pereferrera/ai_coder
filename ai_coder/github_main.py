@@ -28,11 +28,19 @@ def work_on(issue: Issue, repo: Repository):
         description, _, url = match.groups()
 
         print(f" > Found context file to work on: {description}: {url}")
-        
+
         comment_context = ''
+        pr_id = None
 
         for comment in issue.get_comments():
-            comment_context += f"\n- {comment.body}\n"
+            if '[ai_coder]' not in comment.body:
+                comment_context += f"\n- {comment.body}\n"
+            else:
+                if ' Opening PR ' in comment.body:
+                    pr_id = int(comment.body[
+                        (comment.body.index(' Opening PR ')
+                         + len(' Opening PR ')):].rstrip())
+                    print(f'We are already working on this on PR #{pr_id}')
 
         target_branch = f'{issue.id}_ai_coder'
 
@@ -40,7 +48,7 @@ def work_on(issue: Issue, repo: Repository):
             sb = repo.get_branch('main')
             repo.create_git_ref(ref=f'refs/heads/{target_branch}',
                                 sha=sb.commit.sha)
-            
+
             contents = repo.get_contents(url, ref='main')
         except Exception as e:
             print(f'{e} - Branch probably exists already')
@@ -60,7 +68,7 @@ The file to work on has the following content:
 
 {file_contents}
 """)
-        
+
         if comment_context:
             llm_question += ("""
 
@@ -69,7 +77,7 @@ already started working on this issue:
 
 {comment_context}
 """).format(comment_context=comment_context)
-            
+
         llm_question += ("""
 Please output the full content of the file which has to be modified,
 after you applied the necessary modifications to tackle the issue at hand:
@@ -81,14 +89,28 @@ after you applied the necessary modifications to tackle the issue at hand:
 
         modified_content = prompt_gpt3(llm_question)
 
-        repo.update_file(contents.path, "tackle issue",
-                         modified_content, contents.sha, branch=target_branch)
+        if modified_content != current_content:
+            repo.update_file(contents.path, "tackle issue",
+                             modified_content, contents.sha,
+                             branch=target_branch)
 
-        try:
-            repo.create_pull(title=f"Tackle issue {issue.id}", body='',
-                             head=target_branch, base="main")
-        except Exception as e:
-            print(f'{e} - Pull request probably exists already')
+            if pr_id is None:
+                try:
+                    pr = repo.create_pull(
+                        title=f"Tackle issue {issue.id}", body='',
+                        head=target_branch, base="main")
+
+                    issue.create_comment(f'[ai_coder] Opening PR {pr.number}')
+                except Exception as e:
+                    raise Exception(
+                        f'{e} - Pull request probably exists? but pr_id '
+                        'is None!')
+            else:
+                pr = repo.get_pull(pr_id)
+
+            issue.create_comment(f'Worked on it: {pr.html_url}')
+        else:
+            print('LLM does not want to perform any new change for now.')
 
         # TODO for now only one context file
         break
